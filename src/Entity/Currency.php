@@ -27,7 +27,7 @@ class Currency
     private ?int $exchangeRate;
 
     #[ORM\Column(type: "integer")]
-    private ?int $yesterdaysExchangeRate;
+    private ?int $yesterdayExchangeRate;
 
     public function getId(): UuidInterface|string
     {
@@ -72,12 +72,12 @@ class Currency
 
     public function getYesterdayExchangeRate(): ?int
     {
-        return $this->yesterdaysExchangeRate;
+        return $this->yesterdayExchangeRate;
     }
 
-    public function setYesterdayExchangeRate(int $yesterdaysExchangeRate): self
+    public function setYesterdayExchangeRate(int $yesterdayExchangeRate): self
     {
-        $this->yesterdaysExchangeRate = $yesterdaysExchangeRate;
+        $this->yesterdayExchangeRate = $yesterdayExchangeRate;
 
         return $this;
     }
