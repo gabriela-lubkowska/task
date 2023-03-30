@@ -17,9 +17,9 @@
                 <td>{{ currency.name }}</td>
                 <td>{{ currency.currencyCode }}</td>
                 <td>{{ currency.exchangeRate / 100 }}</td>
-                {% if currency.yesterdaysExchangeRate < currency.exchangeRate %}
+                {% if currency.yesterdayExchangeRate < currency.exchangeRate %}
                     <td style="background: lightgreen">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
-                {% elseif currency.yesterdaysExchangeRate > currency.exchangeRate %}
+                {% elseif currency.yesterdayExchangeRate > currency.exchangeRate %}
                     <td style="background: lightcoral">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
                 {% else %}
                     <td>0</td>
