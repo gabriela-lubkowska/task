@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Currency List</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>{{ 'currency.name'|trans }}</th>
+            <th>{{ 'currency.code'|trans }}</th>
+            <th>{{ 'currency.exchange_rate'|trans }}</th>
+            <th>{{ 'currency.change'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for currency in currencies %}
+            <tr>
+                <td>{{ currency.name }}</td>
+                <td>{{ currency.currencyCode }}</td>
+                <td>{{ currency.exchangeRate / 100 }}</td>
+                {% if currency.yesterdaysExchangeRate < currency.exchangeRate %}
+                    <td style="background: lightgreen">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+                {% elseif currency.yesterdaysExchangeRate > currency.exchangeRate %}
+                    <td style="background: lightcoral">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+                {% else %}
+                    <td>0</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

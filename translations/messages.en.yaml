@@ -1,0 +1,5 @@
+currency:
+  name: 'Currency name'
+  code: 'Currency code'
+  exchange_rate: 'Exchange rate'
+  change: 'Change since yesterday'
