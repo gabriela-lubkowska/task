@@ -1,4 +1,4 @@
-# Innovation Software task
+# Task
 
 
 App with integration with NBP API. It allows to check current exchange rate of PLN to other currencies. It also allows to check difference of exchange rate from the day before.
