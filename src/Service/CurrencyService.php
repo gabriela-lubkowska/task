@@ -20,10 +20,17 @@ final class CurrencyService
     public function updateExchangeRates(): void
     {
         $exchangeRates = $this->nbpApiService->getExchangeRates();
-        $yesterdayExchangeRates = $exchangeRates[0]['rates'];
-        $todayExchangeRates = $exchangeRates[1]['rates'];
 
-        foreach ($todayExchangeRates as $index => $exchangeRate) {
+        if (count($exchangeRates) == 0) {
+            // Handle the case where there are zero sets of rates.
+            // You could log an error or throw an exception here.
+            return;
+        }
+
+        $mostRecentExchangeRates = end($exchangeRates)['rates'] ?? [];
+        $secondMostRecentExchangeRates = prev($exchangeRates)['rates'] ?? [];
+
+        foreach ($mostRecentExchangeRates as $index => $exchangeRate) {
             $currencyCode = $exchangeRate['code'];
             $currency = $this->currencyRepository->findOneBy(['currencyCode' => $currencyCode]);
 
@@ -31,14 +38,18 @@ final class CurrencyService
                 $currency = new Currency();
                 $currency->setCurrencyCode($currencyCode);
             }
-            $yesterdayExchangeRate = $yesterdayExchangeRates[$index]['code'];
-            $roundedTodayExchangeRate = (int)round($exchangeRate['mid'] * 100, 0);
-            $currency->setName($exchangeRate['currency']);
-            $currency->setExchangeRate($roundedTodayExchangeRate);
 
-            if (null !== $yesterdayExchangeRate && $yesterdayExchangeRate === $currencyCode) {
-                $roundedYesterdayExchangeRate = (int)round($yesterdayExchangeRates[$index]['mid'] * 100, 0);
-                $currency->setYesterdayExchangeRate($roundedYesterdayExchangeRate);
+            $roundedMostRecentExchangeRate = (int)round($exchangeRate['mid'] * 100, 0);
+            $currency->setName($exchangeRate['currency']);
+            $currency->setExchangeRate($roundedMostRecentExchangeRate);
+
+            if (!empty($secondMostRecentExchangeRates)) {
+                $secondMostRecentExchangeRate = $secondMostRecentExchangeRates[$index]['code'] ?? null;
+
+                if (null !== $secondMostRecentExchangeRate && $secondMostRecentExchangeRate === $currencyCode) {
+                    $roundedSecondMostRecentExchangeRate = (int)round($secondMostRecentExchangeRates[$index]['mid'] * 100, 0);
+                    $currency->setYesterdayExchangeRate($roundedSecondMostRecentExchangeRate);
+                }
             }
 
             $this->entityManager->persist($currency);

@@ -26,7 +26,7 @@ class Currency
     #[ORM\Column(type: "integer")]
     private ?int $exchangeRate;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: "integer", nullable: true)]
     private ?int $yesterdayExchangeRate;
 
     public function getId(): UuidInterface|string
