@@ -22,8 +22,6 @@ final class CurrencyService
         $exchangeRates = $this->nbpApiService->getExchangeRates();
 
         if (count($exchangeRates) == 0) {
-            // Handle the case where there are zero sets of rates.
-            // You could log an error or throw an exception here.
             return;
         }
 
