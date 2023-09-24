@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Your Cart</h1>
+    <ul>
+        {% if cart is not null %}
+        {% if cart.items is not null %}
+        {% for item in cart.items %}
+            <li>
+                {{ item.currency.name }} - Quantity: {{ item.quantity }}
+                <a href="{{ path('cart_remove', {'itemId': item.id}) }}">Remove</a>
+            </li>
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+
+    </ul>
+{% endblock %}

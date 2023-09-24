@@ -2,6 +2,18 @@
 
 {% block body %}
     <h1>Currency List</h1>
+
+    {# Navigation Buttons #}
+    <div>
+        {% if app.user %}
+            <a href="{{ path('cart_index') }}">View Cart</a>
+            <a href="{{ path('app_logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ path('app_login') }}">Login</a>
+            <a href="{{ path('app_register') }}">Register</a>
+        {% endif %}
+    </div>
+
     <table>
         <thead>
         <tr>
@@ -9,6 +21,7 @@
             <th>{{ 'currency.code'|trans }}</th>
             <th>{{ 'currency.exchange_rate'|trans }}</th>
             <th>{{ 'currency.change'|trans }}</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
@@ -24,6 +37,14 @@
                 {% else %}
                     <td>0</td>
                 {% endif %}
+                <td>
+                    {% if app.user %}
+                        <form action="{{ path('cart_add', {'currencyId': currency.id}) }}" method="post">
+                            <input type="number" name="quantity" min="1" max="100" value="1">
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
