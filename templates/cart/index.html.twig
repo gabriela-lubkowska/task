@@ -4,13 +4,17 @@
     <h1>Your Cart</h1>
     <ul>
         {% if cart is not null %}
-        {% if cart.items is not null %}
+            {% if cart.items is null or cart.items is empty %}
+                <h2>Your cart is empty</h2>
+            {% endif %}
+            {% if cart.items is not null and cart.items is not empty %}
         {% for item in cart.items %}
             <li>
                 {{ item.currency.name }} - Quantity: {{ item.quantity }}
                 <a href="{{ path('cart_remove', {'itemId': item.id}) }}">Remove</a>
             </li>
         {% endfor %}
+            <a href="{{ path('order_create') }}" class="btn btn-primary">Order</a>
         {% endif %}
         {% endif %}
 

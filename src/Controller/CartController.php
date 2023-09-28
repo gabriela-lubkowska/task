@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Cart;
 use App\Entity\CartItem;
 use App\Entity\Currency;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CartController extends AbstractController
 {
@@ -41,6 +40,7 @@ class CartController extends AbstractController
 
         $currency = $entityManager->getRepository(Currency::class)->find($currencyId);
         if (!$currency) {
+            // If the currency doesn't exist, redirecting to the cart seems a reasonable fallback
             return $this->redirectToRoute('cart_index');
         }
 
@@ -59,7 +59,8 @@ class CartController extends AbstractController
         $entityManager->persist($cartItem);
         $entityManager->flush();
 
-        return $this->redirectToRoute('cart_index');
+        $referer = $request->headers->get('referer', $this->generateUrl('currency_list'));
+        return $this->redirect($referer);
     }
 
     /**

@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
+use App\Repository\CurrencyOrderRepository;
+use Container9rkXjJS\get_Console_Command_About_LazyService;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 
-#[ORM\Entity(repositoryClass: OrderRepository::class)]
-class Order
+#[ORM\Entity(repositoryClass: CurrencyOrderRepository::class)]
+class CurrencyOrder
 {
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: 'integer')]
     private $id;
@@ -42,6 +46,27 @@ class Order
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $email;
+
+    #[ORM\OneToMany(targetEntity: CurrencyOrderItem::class, mappedBy: "order", orphanRemoval: true, cascade: ['persist'])]
+    private $orderItems;
+
+    /**
+     * @return Collection|CurrencyOrderItem[]
+     */
+    public function getOrderItems(): Collection
+    {
+        return $this->orderItems;
+    }
+
+    public function setOrderItems(ArrayCollection $orderItems): void
+    {
+        $this->orderItems = $orderItems;
+    }
+
+    public function __construct()
+    {
+        $this->orderItems = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -153,5 +178,12 @@ class Order
         $this->email = $email;
     }
 
+    public function addOrderItem(CurrencyOrderItem $item): self {
+        if (!$this->orderItems->contains($item)) {
+            $this->orderItems[] = $item;
+            $item->setOrder($this);
+        }
+        return $this;
+    }
 
 }

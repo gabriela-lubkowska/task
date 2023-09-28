@@ -9,6 +9,15 @@
             <a href="{{ path('cart_index') }}">View Cart</a>
             <a href="{{ path('app_logout') }}">Logout</a>
             <a href="{{ path('add_balance') }}">Add Balance</a>
+            <a href="{{ path('cart_index') }}">Cart</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin') }}">Admin Dashboard</a>
+            {% endif %}
+            {% if app.user.balance > 0 %}
+                    {{ app.user.balance/100 }}
+                {% else %}
+                    {{ app.user.balance }}
+            {% endif %}
         {% else %}
             <a href="{{ path('app_login') }}">Login</a>
             <a href="{{ path('app_register') }}">Register</a>
@@ -27,26 +36,28 @@
         </thead>
         <tbody>
         {% for currency in currencies %}
-            <tr>
-                <td>{{ currency.name }}</td>
-                <td>{{ currency.currencyCode }}</td>
-                <td>{{ currency.exchangeRate / 100 }}</td>
-                {% if currency.yesterdayExchangeRate < currency.exchangeRate %}
-                    <td style="background: lightgreen">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
-                {% elseif currency.yesterdayExchangeRate > currency.exchangeRate %}
-                    <td style="background: lightcoral">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
-                {% else %}
-                    <td>0</td>
-                {% endif %}
-                <td>
-                    {% if app.user %}
-                        <form action="{{ path('cart_add', {'currencyId': currency.id}) }}" method="post">
-                            <input type="number" name="quantity" min="1" max="100" value="1">
-                            <button type="submit">Add to Cart</button>
-                        </form>
+            {% if currency.exchangeRate != 0 %}
+                <tr>
+                    <td>{{ currency.name }}</td>
+                    <td>{{ currency.currencyCode }}</td>
+                    <td>{{ currency.exchangeRate / 100 }}</td>
+                    {% if currency.yesterdayExchangeRate < currency.exchangeRate %}
+                        <td style="background: lightgreen">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+                    {% elseif currency.yesterdayExchangeRate > currency.exchangeRate %}
+                        <td style="background: lightcoral">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+                    {% else %}
+                        <td>0</td>
                     {% endif %}
-                </td>
-            </tr>
+                    <td>
+                        {% if app.user %}
+                            <form action="{{ path('cart_add', {'currencyId': currency.id}) }}" method="post">
+                                <input type="number" name="quantity" min="1" max="100" value="1">
+                                <button type="submit">Add to Cart</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>

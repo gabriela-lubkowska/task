@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Order Placed Successfully!</h1>
+        <p>Thank you for your order. We will process it as soon as possible.</p>
+        <a href="{{ path('currency_list') }}">Return to homepage</a>
+    </div>
+{% endblock %}
