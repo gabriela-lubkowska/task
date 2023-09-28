@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Add Balance</h1>
+
+    <p>Thank you for choosing to add balance to your account. Please make a payment to the following details:</p>
+
+    <table>
+        <tr>
+            <td>IBAN:</td>
+            <td>XX00 1234 5678 9012 3456 7890</td>
+        </tr>
+        <tr>
+            <td>Bank:</td>
+            <td>Example Bank</td>
+        </tr>
+        <tr>
+            <td>Payment Title:</td>
+            <td>User Payment: {{ userId }}</td>
+        </tr>
+    </table>
+
+    <p>As soon as your payment is confirmed, the balance will be added to your account.</p>
+
+{% endblock %}

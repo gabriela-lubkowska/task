@@ -33,6 +33,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Cart::class, cascade: ['persist', 'remove'])]
     private $cart;
 
+    #[ORM\Column(type: 'integer')]
+    private $balance = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +124,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         $this->cart = $cart;
 
+        return $this;
+    }
+
+    public function getBalance(): ?int
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(int $balance): self
+    {
+        $this->balance = $balance;
+        return $this;
+    }
+
+    public function addBalance(int $amount): self
+    {
+        $this->balance += $amount;
+        return $this;
+    }
+
+    public function subtractBalance(int $amount): self
+    {
+        $this->balance -= $amount;
         return $this;
     }
 
