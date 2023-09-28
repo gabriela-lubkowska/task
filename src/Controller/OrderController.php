@@ -72,6 +72,8 @@ class OrderController extends AbstractController
         $cart = $user->getCart();
         $order = new CurrencyOrder();
         $order->setUser($user);
+        $currentBalance = $user->getBalance();
+        $totalOrderValue = 0;
 
         $pickupPoints = $this->getDoctrine()->getRepository(PickupPoint::class)->findAll();
         $form = $this->createForm(OrderType::class, $order, [
@@ -83,6 +85,7 @@ class OrderController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $order = $form->getData();
             foreach ($cart->getItems() as $cartItem) {
+                $totalOrderValue += $cartItem->getCurrency()->getExchangeRate() * $cartItem->getQuantity();
                 $orderItem = new CurrencyOrderItem();
                 $orderItem->setCurrency($cartItem->getCurrency());
                 $orderItem->setQuantity($cartItem->getQuantity());
@@ -94,9 +97,17 @@ class OrderController extends AbstractController
             $entityManager->flush();
 
             // Clear cart after order placement
-            foreach ($cart->getOrderItems() as $cartItem) {
+            foreach ($cart->getItems() as $cartItem) {
                 $entityManager->remove($cartItem);
             }
+
+            if ($currentBalance < $totalOrderValue) {
+                $this->addFlash('error', 'Insufficient funds!');
+                return $this->redirectToRoute('error_route');
+            }
+            $entityManager->persist($user);
+            $newBalance = $currentBalance - $totalOrderValue;
+            $user->setBalance($newBalance);
             $entityManager->flush();
 
             return $this->redirectToRoute('order_success');
@@ -106,5 +117,13 @@ class OrderController extends AbstractController
             'form' => $form->createView(),
             'pickupPoints' => $pickupPoints
         ]);
+    }
+
+    /**
+     * @Route("/error/insufficient-funds", name="error_route")
+     */
+    public function insufficientFunds(): Response
+    {
+        return $this->render('error/insufficient_funds.html.twig');
     }
 }
