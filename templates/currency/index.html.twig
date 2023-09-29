@@ -4,7 +4,7 @@
     <h1>Currency List</h1>
 
     {# Navigation Buttons #}
-    <div>
+    <div class="top">
         {% if app.user %}
             <a href="{{ path('cart_index') }}">View Cart</a>
             <a href="{{ path('app_logout') }}">Logout</a>
@@ -23,28 +23,39 @@
             <a href="{{ path('app_register') }}">Register</a>
         {% endif %}
     </div>
-
+<div class="table">
     <table>
+
         <thead>
         <tr>
-            <th>{{ 'currency.name'|trans }}</th>
-            <th>{{ 'currency.code'|trans }}</th>
-            <th>{{ 'currency.exchange_rate'|trans }}</th>
-            <th>{{ 'currency.change'|trans }}</th>
-            <th>Action</th>
+            <th class="table-divider">{{ 'currency.name'|trans }}</th>
+            <th class="table-divider">{{ 'currency.code'|trans }}</th>
+            <th class="table-divider">{{ 'currency.exchange_rate'|trans }}</th>
+            <th class="table-divider">{{ 'currency.change'|trans }}</th>
+            <th class="table-divider">Action</th>
         </tr>
         </thead>
         <tbody>
         {% for currency in currencies %}
             {% if currency.exchangeRate != 0 %}
+
+                <tr class="table-divider">
+
                 <tr>
+
                     <td>{{ currency.name }}</td>
                     <td>{{ currency.currencyCode }}</td>
                     <td>{{ currency.exchangeRate / 100 }}</td>
                     {% if currency.yesterdayExchangeRate < currency.exchangeRate %}
+
+                        <td style="background: #bae8e8;">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+                    {% elseif currency.yesterdayExchangeRate > currency.exchangeRate %}
+                        <td style="background: #e3f6f5">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+
                         <td style="background: lightgreen">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
                     {% elseif currency.yesterdayExchangeRate > currency.exchangeRate %}
                         <td style="background: lightcoral">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+
                     {% else %}
                         <td>0</td>
                     {% endif %}
@@ -61,4 +72,47 @@
         {% endfor %}
         </tbody>
     </table>
+</div>
+    <style>
+        h1 {
+            font-size: 50px;
+            color: #272643;
+            text-align: center;
+        }
+        body {
+            background-color: #2c698d;
+        }
+        a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 30px;
+            text-align: center;
+            padding: 5px;
+        }
+        tbody {
+            background-color: #e3f6f5;
+        }
+        thead {
+            background-color: #5796bb ;
+        }
+        .table-divider {
+            border-bottom: 1px solid #272643;
+            font-size: 20px;
+            padding: 10px;
+        }
+        .table{
+            background-color: #e3f6f5 ;
+            width: 43%;
+        }
+
+        td {
+            text-align: center;
+            font-size: 20px;
+            padding: 10px;
+        }
+        .top{
+            text-align: center;
+        }
+    </style>
 {% endblock %}
+

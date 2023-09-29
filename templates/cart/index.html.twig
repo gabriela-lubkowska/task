@@ -2,6 +2,7 @@
 
 {% block body %}
     <h1>Your Cart</h1>
+    <div class="text">
     <ul>
         {% if cart is not null %}
             {% if cart.items is null or cart.items is empty %}
@@ -9,14 +10,37 @@
             {% endif %}
             {% if cart.items is not null and cart.items is not empty %}
         {% for item in cart.items %}
+        <div class="tx">
             <li>
                 {{ item.currency.name }} - Quantity: {{ item.quantity }}
                 <a href="{{ path('cart_remove', {'itemId': item.id}) }}">Remove</a>
             </li>
         {% endfor %}
             <a href="{{ path('order_create') }}" class="btn btn-primary">Order</a>
+
+        </div>
+            {% endif %}
         {% endif %}
         {% endif %}
 
     </ul>
+    </div>
+    <style>
+        h1 {
+            font-size: 50px;
+            color: #ffffff;
+            text-align: center;
+            font-style: italic;
+        }
+        body {
+            background-color: #2c698d;
+        }
+        .text{
+            color: #ffffff;
+        }
+        .tx {
+            font-size: 20px;
+        }
+
+    </style>
 {% endblock %}
