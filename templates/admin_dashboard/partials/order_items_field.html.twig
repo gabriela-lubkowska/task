@@ -1,0 +1,8 @@
+<ul>
+        {{ dump(value) }}
+    {% for item in value %}
+        <li>
+            {{ item.currency.name }} - Quantity: {{ item.quantity }}
+        </li>
+    {% endfor %}
+</ul>

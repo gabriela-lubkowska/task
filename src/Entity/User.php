@@ -14,8 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
@@ -32,6 +32,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Cart::class, cascade: ['persist', 'remove'])]
     private $cart;
+
+    #[ORM\Column(type: 'integer')]
+    private $balance = 0;
 
     public function getId(): ?int
     {
@@ -121,6 +124,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         $this->cart = $cart;
 
+        return $this;
+    }
+
+    public function getBalance(): ?int
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(int $balance): self
+    {
+        $this->balance = $balance;
+        return $this;
+    }
+
+    public function addBalance(int $amount): self
+    {
+        $this->balance += $amount;
+        return $this;
+    }
+
+    public function subtractBalance(int $amount): self
+    {
+        $this->balance -= $amount;
         return $this;
     }
 

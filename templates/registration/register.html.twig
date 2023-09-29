@@ -3,15 +3,65 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <body>
+    <div class="top">
+    <div class="register">
+        <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
+        {{ form_start(registrationForm) }}
+        <div class="email">
+        <p>{{ form_row(registrationForm.email) }}</p>
+        </div>
+        <div class="password"></div>
+        <p>{{ form_row(registrationForm.plainPassword, {
+                label: 'Password '
+            }) }}</p>
+        </div>
+        <div class="agree">
+        <p class="register">{{ form_row(registrationForm.agreeTerms) }}</p>
+        </div>
         <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        {{ form_end(registrationForm) }}
+    </div>
+    </div>
+    </body>
+
+    <style>
+        .top {
+            text-align: center;
+        }
+        h1 {
+            font-size: 40px;
+            color: #ffffff;
+            padding: 10px;
+            font-style: italic;
+        }
+        body {
+            background-color: #2c698d;
+        }
+        button {
+            background-color: #bae8e8;
+            color:     #2c698d;
+            font-size: 20px;
+            border-radius: 12px;
+            border: none;
+            padding: 10px;
+        }
+        register {
+            background-color: #FFFFFF;
+            align: center;
+            width: 400px;
+        }
+        .register {
+            color: #ffffff;
+            font-size: 25px;
+            font-style: italic;
+        }
+        .agree {
+            font-size: 20px;
+            color: #ffffff;
+            font-style: italic;
+        }
+
+    </style>
 {% endblock %}

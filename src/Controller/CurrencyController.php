@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Currency;
 use App\Service\CurrencyService;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,7 @@ final class CurrencyController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/currency/update-exchange-rates', name: 'currency_update_exchange_rates')]
     public function updateExchangeRates(): Response
     {
