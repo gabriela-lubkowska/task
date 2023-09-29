@@ -38,14 +38,24 @@
         <tbody>
         {% for currency in currencies %}
             {% if currency.exchangeRate != 0 %}
+
                 <tr class="table-divider">
+
+                <tr>
+
                     <td>{{ currency.name }}</td>
                     <td>{{ currency.currencyCode }}</td>
                     <td>{{ currency.exchangeRate / 100 }}</td>
                     {% if currency.yesterdayExchangeRate < currency.exchangeRate %}
+
                         <td style="background: #bae8e8;">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
                     {% elseif currency.yesterdayExchangeRate > currency.exchangeRate %}
                         <td style="background: #e3f6f5">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+
+                        <td style="background: lightgreen">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+                    {% elseif currency.yesterdayExchangeRate > currency.exchangeRate %}
+                        <td style="background: lightcoral">{{ (currency.exchangeRate - currency.yesterdayExchangeRate) / 100 }}</td>
+
                     {% else %}
                         <td>0</td>
                     {% endif %}
